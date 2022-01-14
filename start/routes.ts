@@ -19,13 +19,13 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Database from '@ioc:Adonis/Lucid/Database'
+import User from 'App/Models/User'
 
 Route.get('/', async () => {
   return { hello: 'world' }
 })
 
 Route.get('/users', async () => {
-  const users = await Database.from('users').select('*')
-  return { users }
+  const users = await User.all()
+  return users.map((user) => user.toJSON())
 })
