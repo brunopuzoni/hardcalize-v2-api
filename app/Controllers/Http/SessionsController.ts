@@ -9,18 +9,20 @@ export default class SessionsController {
     const createSession = new CreateSessionUsecase()
     const session = await createSession.execute({ email, password })
 
-    if (!session) {
+    if (session.isFailure()) {
       return response.unauthorized({ error: 'Incorrect email or password' })
     }
 
+    const sessionUser = session.value
+
     const token = await auth
       .use('api')
-      .generate(session, { expiresIn: '7days', name: session.email })
+      .generate(sessionUser, { expiresIn: '7days', name: sessionUser.email })
 
     response.header('Authorization', `Bearer ${token.token}`)
 
     return {
-      user: session.toJSON(),
+      user: sessionUser.toJSON(),
       token: `Bearer ${token.token}`,
     }
   }

@@ -19,10 +19,10 @@ export default class UsersController {
 
     const newUser = await createUser.execute({ email, password, name })
 
-    if (!newUser) {
+    if (newUser.isFailure()) {
       return response.unprocessableEntity({ error: 'email already in use' })
     }
 
-    return newUser.toJSON()
+    return newUser.value.toJSON()
   }
 }

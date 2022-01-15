@@ -1,3 +1,4 @@
+import { Result } from 'App/Common/Result'
 import User from 'App/Models/User'
 
 type UsecaseParams = {
@@ -6,21 +7,22 @@ type UsecaseParams = {
   name: string
 }
 
+type UsecaseResult = Result<Error, User>
+
 export class CreateUserUsecase {
   public async execute({
     email,
     password,
     name,
-  }: UsecaseParams): Promise<User | false> {
+  }: UsecaseParams): Promise<UsecaseResult> {
     const emailExists = await User.findBy('email', email)
 
     if (emailExists) {
-      //needs improvement
-      return false
+      return Result.fail(new Error())
     }
 
     const user = await User.create({ email, password, name })
 
-    return user
+    return Result.success(user)
   }
 }
