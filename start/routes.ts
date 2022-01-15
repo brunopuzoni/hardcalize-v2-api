@@ -19,13 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import User from 'App/Models/User'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
-
-Route.get('/users', async () => {
-  const users = await User.all()
-  return users.map((user) => user.toJSON())
-})
+Route.get('/users', 'UsersController.index')
+Route.post('/users', 'UsersController.create')
+Route.post('/auth', 'SessionsController.create')
