@@ -24,3 +24,4 @@ Route.get('/users', 'UsersController.index')
 Route.post('/users', 'UsersController.create')
 
 Route.post('/login', 'SessionsController.login')
+Route.post('/logout', 'SessionsController.logout')

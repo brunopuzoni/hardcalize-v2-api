@@ -26,4 +26,9 @@ export default class SessionsController {
       token: `Bearer ${token.token}`,
     }
   }
+
+  public async logout({ auth, response }: HttpContextContract) {
+    await auth.use('api').revoke()
+    return response.noContent()
+  }
 }
