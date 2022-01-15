@@ -11,7 +11,10 @@ export default class UsersController {
   }
 
   public async create({ request, response }: HttpContextContract) {
-    const { email, password, name } = request.body()
+    const email = request.input('email')
+    const password = request.input('password')
+    const name = request.input('name')
+
     const createUser = new CreateUserUsecase()
 
     const newUser = await createUser.execute({ email, password, name })
@@ -20,6 +23,6 @@ export default class UsersController {
       return response.unprocessableEntity({ error: 'email already in use' })
     }
 
-    return newUser
+    return newUser.toJSON()
   }
 }
