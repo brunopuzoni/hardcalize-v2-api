@@ -20,8 +20,13 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/users', 'UsersController.index').middleware('auth')
-Route.post('/users', 'UsersController.create')
+Route.group(() => {
+  Route.group(() => {
+    Route.get('/', 'UsersController.index').middleware('auth')
+    Route.get('/:id', 'UsersController.show').middleware('auth')
+    Route.post('/', 'UsersController.create')
+  }).prefix('/users')
 
-Route.post('/login', 'SessionsController.login')
-Route.post('/logout', 'SessionsController.logout').middleware('auth')
+  Route.post('/logout', 'SessionsController.logout').middleware('auth')
+  Route.post('/login', 'SessionsController.login')
+}).prefix('/api')

@@ -1,5 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { CreateUserUsecase, ListUsersUsecase } from 'App/Usecases'
+import {
+  CreateUserUsecase,
+  ListUsersUsecase,
+  ShowUserUsecase,
+} from 'App/Usecases'
 
 export default class UsersController {
   public async index() {
@@ -8,6 +12,18 @@ export default class UsersController {
     const users = await listUsers.execute()
 
     return users.map((user) => user.toJSON())
+  }
+
+  public async show({ params, response }: HttpContextContract) {
+    const showUser = new ShowUserUsecase()
+
+    const userResult = await showUser.execute({ userId: params.id })
+
+    if (userResult.isFailure()) {
+      return response.unprocessableEntity({ error: 'user not found' })
+    }
+
+    return userResult.value.toJSON()
   }
 
   public async create({ request, response }: HttpContextContract) {
